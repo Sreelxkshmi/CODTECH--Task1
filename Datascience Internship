@@ -1,0 +1,128 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+
+# Set seed for reproducibility
+np.random.seed(42)
+
+# Generate random data
+n = 20
+age = np.random.randint(18, 60, size=n)
+salary = np.random.randint(30000, 120000, size=n)
+department = np.random.choice(['HR', 'Engineering', 'Marketing', 'Sales'], size=n)
+experience = np.random.randint(1, 40, size=n)
+gender = np.random.choice(['Male', 'Female'], size=n)
+names = ['John', 'Jane', 'Bob', 'Alice', 'Mike', 'Emily', 'Tom', 'Emma', 'Chris', 'Lucy',
+         'David', 'Sarah', 'Paul', 'Olivia', 'Mark', 'Sophia', 'Ryan', 'Lily', 'Kevin', 'Grace']
+name = np.random.choice(names, size=n)
+
+# Create DataFrame
+data = pd.DataFrame({
+    'Name': name,
+    'Age': age,
+    'Salary': salary,
+    'Department': department,
+    'Experience': experience,
+    'Gender': gender
+})
+
+# Print the DataFrame
+print(data)
+
+# Print first 5 rows
+print("First 5 rows of the dataset:")
+print(data.head())
+
+# Print summary statistics
+print("\nSummary statistics:")
+print(data.describe())
+
+# Print data types and non-null counts
+print("\nData types and non-null counts:")
+print(data.info())
+
+# Print missing values
+print("\nMissing values:")
+print(data.isnull().sum())
+
+# Set seaborn style
+sns.set(style="whitegrid")
+
+# Plot age distribution
+plt.figure(figsize=(10, 6))
+sns.histplot(data['Age'], bins=20, kde=True)
+plt.title('Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.show()
+
+# Plot salary distribution
+plt.figure(figsize=(10, 6))
+sns.histplot(data['Salary'], bins=20, kde=True)
+plt.title('Salary Distribution')
+plt.xlabel('Salary')
+plt.ylabel('Frequency')
+plt.show()
+
+# Plot age vs. salary
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='Age', y='Salary', hue='Gender', data=data)
+plt.title('Age vs. Salary')
+plt.xlabel('Age')
+plt.ylabel('Salary')
+plt.show()
+
+# Plot salary by department
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='Department', y='Salary', data=data)
+plt.title('Salary by Department')
+plt.xlabel('Department')
+plt.ylabel('Salary')
+plt.show()
+
+# Plot box plot of salary
+plt.figure(figsize=(10, 6))
+sns.boxplot(data['Salary'])
+plt.title('Box Plot of Salary')
+plt.xlabel('Salary')
+plt.show()
+
+# Load Iris dataset
+iris = sns.load_dataset('iris')
+
+# Plot distribution of sepal length
+plt.figure(figsize=(10, 6))
+sns.histplot(iris['sepal_length'], bins=20, kde=True, color='blue')
+plt.title('Distribution of Sepal Length')
+plt.xlabel('Sepal Length (cm)')
+plt.ylabel('Frequency')
+plt.show()
+
+# Plot distribution of petal width
+plt.figure(figsize=(10, 6))
+sns.histplot(iris['petal_width'], bins=20, kde=True, color='green')
+plt.title('Distribution of Petal Width')
+plt.xlabel('Petal Width (cm)')
+plt.ylabel('Frequency')
+plt.show()
+
+# Calculate and plot correlation heatmap
+numeric_data = data.select_dtypes(include=['int32'])
+
+plt.figure(figsize=(8, 6))
+corr = numeric_data.corr()
+sns.heatmap(corr, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
+plt.title('Correlation Heatmap')
+plt.show()
+
+# Suppress warnings and plot masked correlation heatmap
+warnings.filterwarnings("ignore")
+
+plt.figure(figsize=(8, 6))
+corr = numeric_data.corr()
+mask = np.triu(np.ones_like(corr, dtype=bool))
+sns.heatmap(corr, annot=True, cmap='coolwarm', vmin=-1, vmax=1, mask=mask)
+plt.title('Correlation Heatmap')
+plt.show()
